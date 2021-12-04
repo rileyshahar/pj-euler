@@ -1,0 +1,2 @@
+[workspace]
+members = ["main", "01-divide-three-five"]
