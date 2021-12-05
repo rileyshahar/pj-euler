@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+MAIN_TARGET="main/src/main.rs"
+NAME=$1
+
+STARTER_CODE="#[must_use]
+pub fn solve() -> u32 {
+    todo!();
+}"
+
+name_snake=${NAME//-/_}
+
+# find the new project number
+num=$((1 +                                         \
+  $(find -- * -maxdepth 0 -type d -name '[0-9]*' | \
+  sed "s/\([0-9]*\).*/\1/g"                      | \
+  sort | tail -n1)))                                
+
+pkg="$(printf "%02d" $num)-$NAME"
+
+sed -i "$(wc -l < Cargo.toml)i\\  \"$pkg\",\\" Cargo.toml
+cargo new --lib "$pkg" --name "$NAME"
+cargo add "$NAME" --manifest-path main/Cargo.toml --path "$pkg"
+sed -i "$(wc -l < "$MAIN_TARGET")i\\    \"$num\" => $name_snake\\" "$MAIN_TARGET"
+
+echo "$STARTER_CODE" > "$pkg/src/lib.rs"
