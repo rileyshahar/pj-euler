@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 divide-three-five = { path = "../01-divide-three-five" }
+fib-even = { path = "../02-fib-even" }

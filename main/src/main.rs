@@ -31,4 +31,5 @@ macro_rules! euler_problems {
 
 euler_problems! {
     "1" => divide_three_five
+    "2" => fib_even
 }
