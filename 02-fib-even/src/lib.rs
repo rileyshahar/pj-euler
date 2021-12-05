@@ -14,3 +14,5 @@ pub fn solve() -> u32 {
 
     out
 }
+
+utils::euler_expect!(4_613_732);

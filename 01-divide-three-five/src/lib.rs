@@ -4,3 +4,5 @@
 pub fn solve() -> u32 {
     (0..1000).filter(|x| x % 3 == 0 || x % 5 == 0).sum()
 }
+
+utils::euler_expect!(233_168);

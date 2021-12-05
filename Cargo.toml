@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "main",
+  "utils",
   "01-divide-three-five",
   "02-fib-even",
 ]
