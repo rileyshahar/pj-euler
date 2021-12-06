@@ -1,4 +1,4 @@
-#![feature(destructuring_assignment)]
+#![feature(destructuring_assignment, step_trait, trait_alias, test)]
 
 pub mod problems;
-mod utils;
+pub mod utils;

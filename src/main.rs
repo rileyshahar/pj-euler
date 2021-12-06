@@ -9,7 +9,7 @@ macro_rules! euler_problems {
             // really simple CLI arg parser to get the first arg and check it against problems
             let solution = match std::env::args().skip(1).next().unwrap_or_default().as_str() {
                 $(
-                    $num => problems::$name::solve(),
+                    $num => problems::$name::solve().to_string(),
                 )*
                 unknown => panic!("no matching problem: {}", unknown)
             };
@@ -36,4 +36,5 @@ macro_rules! euler_problems {
 euler_problems! {
     "1" => p001
     "2" => p002
+    "3" => p003
 }

@@ -6,4 +6,4 @@ fn solve_for(bound: u32) -> u32 {
 }
 
 utils::test::example!(10 => 23);
-utils::test::problem!(1000 => 233_168);
+utils::test::problem!(u32: 1000 => 233_168);

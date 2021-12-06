@@ -2,3 +2,8 @@
 name = "pj-euler"
 version = "0.1.0"
 edition = "2021"
+
+[features]
+
+[dependencies]
+num = "0.4.0"

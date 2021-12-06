@@ -6,17 +6,17 @@
 /// is reached.
 #[macro_export]
 macro_rules! problem {
-    ($in:expr) => {
+    ($ty:ty: $in:expr) => {
         #[must_use]
-        pub fn solve() -> u32 {
+        pub fn solve() -> $ty {
             solve_for($in)
         }
     };
 
-    ($in:expr => $out:expr) => {
+    ($ty:ty: $in:expr => $out:expr) => {
         use crate::utils::test::problem;
 
-        problem!($in);
+        problem!($ty: $in);
 
         #[cfg(test)]
         mod solve {

@@ -16,4 +16,4 @@ fn solve_for(bound: u32) -> u32 {
 }
 
 utils::test::example!(100 => 44);
-utils::test::problem!(4_000_000 => 4_613_732);
+utils::test::problem!(u32: 4_000_000 => 4_613_732);
