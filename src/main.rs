@@ -17,7 +17,7 @@ macro_rules! euler_problems {
         }
 
         #[cfg(test)]
-        mod benches {
+        mod problem_benches {
             use super::*;
 
             extern crate test;
