@@ -180,10 +180,7 @@ mod benches {
     #[bench]
     fn first_thousand_primes(b: &mut Bencher) {
         b.iter(|| {
-            let _ = Primes::<usize>::new()
-                .take(10000)
-                .collect::<Vec<_>>()
-                .last();
+            let _ = Primes::<usize>::new().take(1000).collect::<Vec<_>>().last();
         });
     }
 
