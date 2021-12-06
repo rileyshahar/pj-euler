@@ -101,9 +101,69 @@ impl<N: NumTraits> Iterator for Primes<N> {
     }
 }
 
+/// A single prime factor.
+#[derive(Debug, PartialEq)]
+pub struct PrimeFactor<T> {
+    pub factor: T,
+    pub exponent: T,
+}
+
+/// An iterator over the prime factorization of a number in descending order.
+///
+/// # Examples
+/// ```
+/// # use pj_euler::utils::primes::{PrimeFactor, PrimeFactorization};
+/// let mut pf = PrimeFactorization::<u32>::of(40);
+/// assert_eq!(pf.next(), Some(PrimeFactor { factor: 2, exponent: 3 }));
+/// assert_eq!(pf.next(), Some(PrimeFactor { factor: 5, exponent: 1 }));
+/// assert_eq!(pf.next(), None);
+/// ```
+pub struct PrimeFactorization<T> {
+    num: T,
+    factor: T,
+}
+
+impl<N: NumTraits> PrimeFactorization<N> {
+    /// Create a prime factorization.
+    pub fn of(num: N) -> Self {
+        Self { num, factor: _2() }
+    }
+}
+
+impl<N: NumTraits> Iterator for PrimeFactorization<N> {
+    type Item = PrimeFactor<N>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.num <= _1() {
+            None
+        } else {
+            // find the next prime factor of self.num
+            while self.num % self.factor != _0() {
+                if self.factor == _2() {
+                    self.factor = self.factor + _1();
+                } else {
+                    self.factor = self.factor + _2();
+                }
+            }
+
+            // compute the corresponding exponent
+            let mut exponent = _1();
+            self.num = self.num / self.factor;
+            while self.num % self.factor == _0() {
+                self.num = self.num / self.factor;
+                exponent = exponent + _1();
+            }
+            Some(PrimeFactor {
+                factor: self.factor,
+                exponent,
+            })
+        }
+    }
+}
+
 #[cfg(test)]
 mod benches {
-    use super::{is_prime, Primes};
+    use super::{is_prime, PrimeFactorization, Primes};
 
     extern crate test;
     use test::Bencher;
@@ -125,5 +185,10 @@ mod benches {
                 .collect::<Vec<_>>()
                 .last();
         });
+    }
+
+    #[bench]
+    fn factorize_637(b: &mut Bencher) {
+        b.iter(|| for _factor in PrimeFactorization::of(6_002_462) {});
     }
 }
