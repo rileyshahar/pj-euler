@@ -8,6 +8,7 @@
 macro_rules! problem {
     ($ty:ty: $in:expr) => {
         #[must_use]
+        #[allow(clippy::missing_const_for_fn)]
         pub fn solve() -> $ty {
             solve_for($in)
         }
