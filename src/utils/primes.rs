@@ -1,14 +1,16 @@
 //! Utilities relating to prime numbers.
 
+use std::iter::Step;
+
+use num::Num;
+
 use super::num_fn::{_0, _1, _2, _3};
-use super::num_seq::NumTraits;
 
 /// Check whether n is prime.
 ///
 /// # Examples
 /// ```
-/// use pj_euler::utils::primes::is_prime;
-///
+/// # use pj_euler::utils::primes::is_prime;
 /// assert!(is_prime(2));
 /// assert!(is_prime(5));
 /// assert!(!is_prime(6));
@@ -18,7 +20,7 @@ use super::num_seq::NumTraits;
 #[must_use]
 pub fn is_prime<N>(n: N) -> bool
 where
-    N: NumTraits,
+    N: Num + Step + PartialOrd + Copy,
 {
     if n == _0() || n == _1() {
         return false;
@@ -51,7 +53,6 @@ where
 /// assert_eq!(p.next(), Some(7));
 /// assert_eq!(p.next(), Some(11));
 /// ```
-///
 /// ```
 /// # use pj_euler::utils::primes::Primes;
 /// let mut p = Primes::<u32>::new();
@@ -77,7 +78,7 @@ impl<T> Default for Primes<T> {
     }
 }
 
-impl<N: NumTraits> Iterator for Primes<N> {
+impl<N: Num + Step + PartialOrd + Copy> Iterator for Primes<N> {
     type Item = N;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -108,7 +109,7 @@ pub struct PrimeFactor<T> {
     pub exponent: T,
 }
 
-/// An iterator over the prime factorization of a number in descending order.
+/// An iterator over the prime factorization of a number in ascending order.
 ///
 /// # Examples
 /// ```
@@ -123,14 +124,14 @@ pub struct PrimeFactorization<T> {
     factor: T,
 }
 
-impl<N: NumTraits> PrimeFactorization<N> {
+impl<N: Num> PrimeFactorization<N> {
     /// Create a prime factorization.
     pub fn of(num: N) -> Self {
         Self { num, factor: _2() }
     }
 }
 
-impl<N: NumTraits> Iterator for PrimeFactorization<N> {
+impl<N: Num + PartialOrd + Copy> Iterator for PrimeFactorization<N> {
     type Item = PrimeFactor<N>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -161,6 +162,26 @@ impl<N: NumTraits> Iterator for PrimeFactorization<N> {
     }
 }
 
+/// Determine the total number of divisors the number.
+///
+/// # Examples
+/// ```
+/// # use pj_euler::utils::primes::number_of_divisors;
+/// assert_eq!(number_of_divisors(28), 6);
+/// ```
+/// ```
+/// # use pj_euler::utils::primes::number_of_divisors;
+/// assert_eq!(number_of_divisors(2), 2);
+/// ```
+/// ``` # use pj_euler::utils::primes::number_of_divisors;
+/// assert_eq!(number_of_divisors(1), 1);
+/// ```
+pub fn number_of_divisors<N: Num + PartialOrd + Copy>(of: N) -> N {
+    PrimeFactorization::of(of)
+        .map(|PrimeFactor { exponent, .. }| exponent + _1())
+        .fold(_1(), |p, n| p * n)
+}
+
 #[cfg(test)]
 mod benches {
     use super::{is_prime, PrimeFactorization, Primes};
@@ -178,14 +199,14 @@ mod benches {
     }
 
     #[bench]
-    fn first_thousand_primes(b: &mut Bencher) {
+    fn thousanth_prime(b: &mut Bencher) {
         b.iter(|| {
-            let _ = Primes::<usize>::new().take(1000).collect::<Vec<_>>().last();
+            assert_eq!(Primes::<usize>::new().nth(999), Some(7919));
         });
     }
 
     #[bench]
-    fn factorize_637(b: &mut Bencher) {
+    fn factorize_large_n(b: &mut Bencher) {
         b.iter(|| for _factor in PrimeFactorization::of(6_002_462) {});
     }
 }

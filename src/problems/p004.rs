@@ -32,12 +32,12 @@ mod tests {
     use super::is_palindrome;
 
     #[test]
-    const fn is_palindrime_12() {
+    const fn is_palindrime_twelve() {
         assert!(!is_palindrome(12));
     }
 
     #[test]
-    const fn is_palindrime_10903430901() {
+    const fn is_palindrime_large() {
         assert!(is_palindrome(100_343_001));
     }
 }
