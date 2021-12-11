@@ -7,5 +7,6 @@
     trait_alias
 )]
 
-pub mod problems;
+pub mod aoc;
+pub mod euler;
 pub mod utils;

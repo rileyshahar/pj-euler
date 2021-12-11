@@ -3,4 +3,3 @@
 mod num_fn;
 pub mod primes;
 pub mod seqs;
-pub mod test;
